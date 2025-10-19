@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Huelluditos</string>
+    <string name="welcome_message">Bienvenido a Huelluditos\nCuidamos de tus mascotas</string>
+    <string name="get_started">Comenzar</string>
+    <string name="create_account">Crear Cuenta</string>
+    <string name="login">Iniciar Sesión</string>
+    <string name="email">Correo Electrónico</string>
+    <string name="password">Contraseña</string>
+    <string name="full_name">Nombre Completo</string>
+    <string name="phone">Teléfono</string>
+    <string name="forgot_password">¿Olvidaste tu contraseña?</string>
+</resources>
