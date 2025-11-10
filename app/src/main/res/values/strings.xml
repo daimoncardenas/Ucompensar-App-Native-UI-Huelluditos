@@ -1,12 +1,42 @@
 <resources>
-    <string name="app_name">Huelluditos</string>
-    <string name="welcome_message">Bienvenido a Huelluditos\nCuidamos de tus mascotas</string>
-    <string name="get_started">Comenzar</string>
-    <string name="create_account">Crear Cuenta</string>
-    <string name="login">Iniciar Sesión</string>
-    <string name="email">Correo Electrónico</string>
+    <string name="login_title">Iniciar sesión</string>
+    <string name="email">Correo electrónico</string>
     <string name="password">Contraseña</string>
-    <string name="full_name">Nombre Completo</string>
-    <string name="phone">Teléfono</string>
     <string name="forgot_password">¿Olvidaste tu contraseña?</string>
+    <string name="login">Ingresar</string>
+    <string name="no_account_register">¿No tienes cuenta? Regístrate</string>
+
+    <string name="product_list_title">Lista de productos</string>
+    <string name="add_product">Agregar producto</string>
+    <string name="view_cart">Ver carrito</string>
+    <string name="add_to_cart">Agregar al carrito</string>
+    <string name="sample_product_name">Nombre del producto</string>
+    <string name="sample_product_price">$0.00</string>
+
+    <string name="cart_title">Mi carrito</string>
+    <string name="confirm_purchase">Confirmar compra</string>
+    <string name="cart_quantity_sample">Cantidad: 1</string>
+    <string name="cart_total_sample">Total: $0.00</string>
+
+    <string name="profile_picture">Foto de perfil</string>
+    <string name="sample_user_name">Usuario Huelluditos</string>
+    <string name="sample_user_email">usuario@correo.com</string>
+    <string name="profile_options_title">Opciones</string>
+    <string name="profile_edit">Editar perfil</string>
+    <string name="profile_settings">Ver productos</string>
+    <string name="profile_logout">Cerrar sesión</string>
+
+    <string name="welcome_title">Bienvenido a Huelluditos</string>
+    <string name="welcome_subtitle">Encuentra los mejores productos para tus mascotas en un solo lugar.</string>
+    <string name="get_started">Comenzar</string>
+
+    <string name="app_name">HUELLUDITOS</string>
+
+    <string name="register_title">Crear cuenta</string>
+    <string name="full_name">Nombre completo</string>
+    <string name="register">Registrarse</string>
+    <string name="already_have_account">¿Ya tienes cuenta? Inicia sesión</string>
+
+
+
 </resources>

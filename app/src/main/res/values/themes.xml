@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="Theme.Huelluditos" parent="android:Theme.Material.Light.NoActionBar" />
+    <!-- Tema principal de la app, compatible con AppCompatActivity -->
+    <style name="Theme.Huelluditos" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Colores básicos -->
+        <item name="colorPrimary">@color/primary_color</item>
+        <item name="colorPrimaryVariant">@color/primary_color</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorAccent">@color/primary_color</item>
+
+        <!-- Fondo por defecto -->
+        <item name="android:windowBackground">@color/white</item>
+    </style>
+
 </resources>
