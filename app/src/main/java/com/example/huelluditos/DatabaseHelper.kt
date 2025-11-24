@@ -6,7 +6,14 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
 data class Customer(val id: Int, val name: String, val email: String)
-data class Product(val id: Int, val name: String, val price: Double, val description: String?)
+data class Product(
+    val id: Int,
+    val name: String,
+    val price: Double,
+    val description: String?,
+    val imageUri: String?
+)
+
 data class CartItemView(val id: Int, val productName: String, val quantity: Int, val unitPrice: Double)
 
 class DatabaseHelper(context: Context) :
@@ -122,13 +129,19 @@ class DatabaseHelper(context: Context) :
 
     // ---------- Products (CRUD) ----------
 
-    fun insertProduct(name: String, price: Double, description: String?): Boolean {
+    fun insertProduct(
+        name: String,
+        price: Double,
+        description: String?,
+        imageUri: String? = null
+    ): Boolean {
         val db = writableDatabase
         val now = System.currentTimeMillis().toString()
         val values = ContentValues().apply {
             put("name", name)
             put("price", price)
             put("description", description)
+            put("imageUri", imageUri)
             put("createdAt", now)
             put("updatedAt", now)
         }
@@ -141,7 +154,7 @@ class DatabaseHelper(context: Context) :
         val db = readableDatabase
         val cursor = db.query(
             "products",
-            arrayOf("id", "name", "price", "description"),
+            arrayOf("id", "name", "price", "description", "imageUri"),
             null, null, null, null,
             "createdAt DESC"
         )
@@ -153,7 +166,8 @@ class DatabaseHelper(context: Context) :
                         id = it.getInt(0),
                         name = it.getString(1),
                         price = it.getDouble(2),
-                        description = it.getString(3)
+                        description = it.getString(3),
+                        imageUri = it.getString(4)
                     )
                 )
             }
@@ -287,5 +301,76 @@ class DatabaseHelper(context: Context) :
                 db.update("carts", values, "id = ?", arrayOf(cartId.toString()))
             }
         }
+    }
+
+    // ---------- Customers CRUD ----------
+
+    fun getAllCustomers(): List<Customer> {
+        val db = readableDatabase
+        val cursor = db.query(
+            "customers",
+            arrayOf("id", "name", "email"),
+            null, null, null, null,
+            "createdAt DESC"
+        )
+        val customers = mutableListOf<Customer>()
+        cursor.use {
+            while (it.moveToNext()) {
+                customers.add(
+                    Customer(
+                        id = it.getInt(0),
+                        name = it.getString(1),
+                        email = it.getString(2)
+                    )
+                )
+            }
+        }
+        return customers
+    }
+
+    fun updateCustomer(customerId: Int, name: String, email: String, password: String? = null): Boolean {
+        val db = writableDatabase
+        val values = ContentValues().apply {
+            put("name", name)
+            put("email", email)
+            put("updatedAt", System.currentTimeMillis().toString())
+            if (!password.isNullOrEmpty()) {
+                put("password", password)
+            }
+        }
+
+        return try {
+            val rows = db.update("customers", values, "id = ?", arrayOf(customerId.toString()))
+            rows > 0
+        } catch (e: Exception) {
+            false
+        } finally {
+            db.close()
+        }
+    }
+
+    fun deleteCustomer(customerId: Int): Boolean {
+        val db = writableDatabase
+        // First check if customer has any carts
+        val cartCursor = db.query(
+            "carts",
+            arrayOf("id"),
+            "customerId = ?",
+            arrayOf(customerId.toString()),
+            null, null, null
+        )
+
+        val hasCarts = cartCursor.count > 0
+        cartCursor.close()
+
+        if (hasCarts) {
+            // Customer has carts, cannot delete
+            db.close()
+            return false
+        }
+
+        val rows = db.delete("customers", "id = ?", arrayOf(customerId.toString()))
+        db.close()
+        return rows > 0
     }
 }

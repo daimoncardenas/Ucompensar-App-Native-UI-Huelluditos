@@ -27,7 +27,10 @@
             android:layout_height="wrap_content"
             android:hint="@string/full_name"
             android:inputType="textPersonName"
-            android:layout_marginBottom="15dp" />
+            android:layout_marginBottom="15dp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
+            android:background="@android:drawable/edit_text" />
 
         <EditText
             android:id="@+id/etEmailRegister"
@@ -35,7 +38,10 @@
             android:layout_height="wrap_content"
             android:hint="@string/email"
             android:inputType="textEmailAddress"
-            android:layout_marginBottom="15dp" />
+            android:layout_marginBottom="15dp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
+            android:background="@android:drawable/edit_text" />
 
         <EditText
             android:id="@+id/etPasswordRegister"
@@ -43,7 +49,11 @@
             android:layout_height="wrap_content"
             android:hint="@string/password"
             android:inputType="textPassword"
-            android:layout_marginBottom="25dp" />
+            android:layout_marginBottom="25dp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
+            android:background="@android:drawable/edit_text" />
+
 
         <Button
             android:id="@+id/btnRegister"

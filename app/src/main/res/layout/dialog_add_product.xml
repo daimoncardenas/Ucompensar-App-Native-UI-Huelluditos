@@ -19,4 +19,23 @@
         android:hint="Precio"
         android:inputType="numberDecimal"
         android:layout_marginTop="12dp" />
+
+    <!-- Botón para tomar foto del producto -->
+    <Button
+        android:id="@+id/btnTakePhoto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tomar foto del producto"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/primary_color"
+        android:textColor="@color/white" />
+
+    <!-- Estado de la foto -->
+    <TextView
+        android:id="@+id/tvPhotoStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sin foto"
+        android:textSize="12sp"
+        android:layout_marginTop="8dp" />
 </LinearLayout>

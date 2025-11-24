@@ -7,11 +7,21 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import android.net.Uri
+
 
 class ProductListActivity : AppCompatActivity() {
 
     private lateinit var db: DatabaseHelper
     private lateinit var adapter: ProductAdapter
+
+    // NUEVO: para la foto de producto
+    private var currentPhotoPath: String? = null
+    private var tvPhotoStatus: android.widget.TextView? = null
+
+    companion object {
+        private const val REQUEST_TAKE_PHOTO = 2001
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,9 +73,17 @@ class ProductListActivity : AppCompatActivity() {
     }
 
     private fun showCreateDialog() {
+        currentPhotoPath = null  // resetear cada vez que se abre el diálogo
+
         val dialogView = layoutInflater.inflate(R.layout.dialog_add_product, null)
         val etName = dialogView.findViewById<android.widget.EditText>(R.id.etProductName)
         val etPrice = dialogView.findViewById<android.widget.EditText>(R.id.etProductPrice)
+        val btnTakePhoto = dialogView.findViewById<android.widget.Button>(R.id.btnTakePhoto)
+        tvPhotoStatus = dialogView.findViewById(R.id.tvPhotoStatus)
+
+        btnTakePhoto.setOnClickListener {
+            dispatchTakePictureIntent()
+        }
 
         androidx.appcompat.app.AlertDialog.Builder(this)
             .setTitle("Nuevo producto")
@@ -73,12 +91,19 @@ class ProductListActivity : AppCompatActivity() {
             .setPositiveButton("Guardar") { _, _ ->
                 val name = etName.text.toString()
                 val price = etPrice.text.toString().toDoubleOrNull() ?: 0.0
-                db.insertProduct(name, price, "Producto añadido manualmente")
+
+                db.insertProduct(
+                    name = name,
+                    price = price,
+                    description = "Producto añadido manualmente",
+                    imageUri = currentPhotoPath  // puede ser null si no se tomó foto
+                )
                 loadProducts()
             }
             .setNegativeButton("Cancelar", null)
             .show()
     }
+
 
     private fun showEditDialog(product: Product) {
         val dialogView = layoutInflater.inflate(R.layout.dialog_add_product, null)
@@ -100,4 +125,63 @@ class ProductListActivity : AppCompatActivity() {
             .setNegativeButton("Cancelar", null)
             .show()
     }
+
+    private fun dispatchTakePictureIntent() {
+        val takePictureIntent = Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE)
+
+        // Verificar que haya app de cámara
+        if (takePictureIntent.resolveActivity(packageManager) != null) {
+            val photoFile: java.io.File? = try {
+                createImageFile()
+            } catch (ex: java.io.IOException) {
+                Toast.makeText(this, "Error creando archivo de imagen", Toast.LENGTH_SHORT).show()
+                null
+            }
+
+            photoFile?.also {
+                val photoURI: Uri = androidx.core.content.FileProvider.getUriForFile(
+                    this,
+                    "com.example.huelluditos.fileprovider",
+                    it
+                )
+                takePictureIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, photoURI)
+                takePictureIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                takePictureIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO)
+            }
+        } else {
+            Toast.makeText(this, "No hay aplicación de cámara disponible", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    @Throws(java.io.IOException::class)
+    private fun createImageFile(): java.io.File {
+        val timeStamp: String = java.text.SimpleDateFormat(
+            "yyyyMMdd_HHmmss",
+            java.util.Locale.getDefault()
+        ).format(java.util.Date())
+        val imageFileName = "PRODUCT_${timeStamp}_"
+        val storageDir: java.io.File? = getExternalFilesDir(android.os.Environment.DIRECTORY_PICTURES)
+
+        val image = java.io.File.createTempFile(
+            imageFileName,
+            ".jpg",
+            storageDir
+        )
+
+        currentPhotoPath = image.absolutePath
+        return image
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
+            // La imagen ya está guardada en currentPhotoPath
+            tvPhotoStatus?.text = "Foto capturada"
+            Toast.makeText(this, "Foto del producto guardada", Toast.LENGTH_SHORT).show()
+        }
+    }
+
 }

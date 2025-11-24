@@ -6,6 +6,9 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import android.net.Uri
+import android.widget.ImageView
+import java.io.File
 
 class ProductAdapter(
     private var items: List<Product>,
@@ -21,9 +24,22 @@ class ProductAdapter(
         private val btnEdit: Button = v.findViewById(R.id.btnEdit)
         private val btnDelete: Button = v.findViewById(R.id.btnDelete)
 
+        private val ivImage: ImageView = v.findViewById(R.id.ivProductImage)
+
         fun bind(p: Product) {
             tvName.text = p.name
             tvPrice.text = "$${p.price}"
+
+            if (!p.imageUri.isNullOrEmpty()) {
+                val file = File(p.imageUri)
+                if (file.exists()) {
+                    ivImage.setImageURI(Uri.fromFile(file))
+                } else {
+                    ivImage.setImageResource(R.drawable.logo_huelluditos)
+                }
+            } else {
+                ivImage.setImageResource(R.drawable.logo_huelluditos)
+            }
 
             btnAdd.setOnClickListener { onAddToCart(p) }
             btnEdit.setOnClickListener { onEdit(p) }

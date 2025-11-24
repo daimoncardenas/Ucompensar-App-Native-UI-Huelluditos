@@ -37,6 +37,34 @@
     <string name="register">Registrarse</string>
     <string name="already_have_account">¿Ya tienes cuenta? Inicia sesión</string>
 
+    <string name="customer_management">Gestión de Clientes</string>
+    <string name="add_customer">Agregar Cliente</string>
+    <string name="customer_name">Nombre del cliente</string>
+    <string name="customer_email">Email del cliente</string>
+    <string name="customer_password">Contraseña</string>
+    <string name="edit_customer">Editar Cliente</string>
+    <string name="delete_customer">Eliminar Cliente</string>
+    <string name="delete_customer_confirmation">¿Estás seguro de que quieres eliminar este cliente?</string>
 
+
+    <string name="profile_products">Gestión de Productos</string>
+    <string name="profile_customers">Gestión de Clientes</string>
+
+    <!-- Tiendas físicas Huelluditos -->
+    <string name="store_locations_title">Tiendas Huelluditos</string>
+    <string name="store_locations_subtitle">
+        Conoce nuestras sedes físicas y encuéntralas fácilmente en Google Maps.
+    </string>
+
+    <string name="store_suba_name">Huelluditos Suba</string>
+    <string name="store_suba_address">Calle 123 #45-67, Suba, Bogotá</string>
+
+    <string name="store_teusaquillo_name">Huelluditos Teusaquillo</string>
+    <string name="store_teusaquillo_address">Carrera 10 #28-30, Teusaquillo, Bogotá</string>
+
+    <string name="store_villavicencio_name">Huelluditos Villavicencio</string>
+    <string name="store_villavicencio_address">Avenida 40 #15-20, Villavicencio</string>
+
+    <string name="store_open_in_maps">Ver en Google Maps</string>
 
 </resources>

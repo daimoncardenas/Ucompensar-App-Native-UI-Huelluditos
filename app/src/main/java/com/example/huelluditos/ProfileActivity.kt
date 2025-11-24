@@ -2,12 +2,17 @@ package com.example.huelluditos
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.huelluditos.ui.StoreLocationsActivity
 
 class ProfileActivity : AppCompatActivity() {
 
     private lateinit var db: DatabaseHelper
+    private lateinit var tvUserName: TextView
+    private lateinit var tvUserEmail: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -15,11 +20,20 @@ class ProfileActivity : AppCompatActivity() {
 
         db = DatabaseHelper(this)
 
-        val tvUserName = findViewById<TextView>(R.id.tvUserName)
-        val tvUserEmail = findViewById<TextView>(R.id.tvUserEmail)
-        val tvLogout = findViewById<TextView>(R.id.tvLogout)
-        val tvEditProfile = findViewById<TextView>(R.id.tvEditProfile)
-        val tvSettings = findViewById<TextView>(R.id.tvSettings)
+        // Inicializar vistas del perfil
+        tvUserName = findViewById(R.id.tvUserName)
+        tvUserEmail = findViewById(R.id.tvUserEmail)
+        val tvLogout: TextView = findViewById(R.id.tvLogout)
+        val tvEditProfile: TextView = findViewById(R.id.tvEditProfile)
+        val tvProductManagement: TextView = findViewById(R.id.tvProductManagement)
+        val tvCustomerManagement: TextView = findViewById(R.id.tvCustomerManagement)
+
+        // Botón para abrir las tiendas Huelluditos (nueva Activity)
+        val btnOpenStoreLocations: Button = findViewById(R.id.btnOpenStoreLocations)
+        btnOpenStoreLocations.setOnClickListener {
+            val intent = Intent(this, StoreLocationsActivity::class.java)
+            startActivity(intent)
+        }
 
         // Obtener id del usuario logueado
         val prefs = getSharedPreferences("huelluditos_prefs", MODE_PRIVATE)
@@ -33,14 +47,19 @@ class ProfileActivity : AppCompatActivity() {
             }
         }
 
-        // Usar "Editar perfil" para ir al listado de productos (puedes cambiarlo a tu gusto)
+        // "Editar perfil"
         tvEditProfile.setOnClickListener {
+            showEditProfileDialog(userId)
+        }
+
+        // "Gestión de Productos"
+        tvProductManagement.setOnClickListener {
             startActivity(Intent(this, ProductListActivity::class.java))
         }
 
-        // O usar "Configuración" para lo mismo (elige uno de los dos)
-        tvSettings.setOnClickListener {
-            startActivity(Intent(this, ProductListActivity::class.java))
+        // "Gestión de Clientes"
+        tvCustomerManagement.setOnClickListener {
+            startActivity(Intent(this, CustomerListActivity::class.java))
         }
 
         // Cerrar sesión
@@ -73,6 +92,53 @@ class ProfileActivity : AppCompatActivity() {
             }
         }
         return null
+    }
+
+    private fun showEditProfileDialog(userId: Int) {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_add_customer, null)
+        val etName = dialogView.findViewById<android.widget.EditText>(R.id.etCustomerName)
+        val etEmail = dialogView.findViewById<android.widget.EditText>(R.id.etCustomerEmail)
+        val etPassword = dialogView.findViewById<android.widget.EditText>(R.id.etCustomerPassword)
+
+        // Pre-fill with current user data
+        val currentUser = getUserInfo(userId)
+        currentUser?.let {
+            etName.setText(it.name)
+            etEmail.setText(it.email)
+        }
+
+        // Hint para la contraseña nueva
+        etPassword.hint = "Nueva contraseña (opcional)"
+
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle("Editar Mi Perfil")
+            .setView(dialogView)
+            .setPositiveButton("Guardar cambios") { _, _ ->
+                val name = etName.text.toString()
+                val email = etEmail.text.toString()
+                val password = etPassword.text.toString()
+
+                if (name.isNotEmpty() && email.isNotEmpty()) {
+                    val success = db.updateCustomer(
+                        userId,
+                        name,
+                        email,
+                        password.ifEmpty { null }
+                    )
+                    if (success) {
+                        // Actualizar datos visibles
+                        tvUserName.text = name
+                        tvUserEmail.text = email
+                        Toast.makeText(this, "Perfil actualizado exitosamente", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this, "Error al actualizar el perfil", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Toast.makeText(this, "Por favor complete todos los campos obligatorios", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .setNegativeButton("Cancelar", null)
+            .show()
     }
 
     data class UserProfile(

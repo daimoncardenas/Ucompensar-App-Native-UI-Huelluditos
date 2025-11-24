@@ -5,6 +5,10 @@
     <!-- Permisos de ubicación (necesarios para CartActivity / LocationServices) -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
 
     <application
         android:allowBackup="true"
@@ -17,11 +21,20 @@
         android:theme="@style/Theme.Huelluditos">
 
         <activity android:name=".CartActivity" />
-        <activity android:name=".ProductListActivity" />
+        <activity
+            android:name=".ProductListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CustomerListActivity"
+            android:exported="false" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".WelcomeActivity" />
+        <activity
+            android:name=".ui.StoreLocationsActivity"
+            android:exported="false"
+            android:label="@string/store_locations_title" />
 
         <activity
             android:name=".MainActivity"
@@ -34,6 +47,15 @@
             </intent-filter>
         </activity>
 
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.huelluditos.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider>
     </application>
 
 </manifest>

@@ -77,10 +77,24 @@
                 android:background="#EEEEEE" />
 
             <TextView
-                android:id="@+id/tvSettings"
+                android:id="@+id/tvProductManagement"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/profile_settings"
+                android:text="@string/profile_products"
+                android:textColor="@color/black"
+                android:padding="15dp"
+                android:background="?android:attr/selectableItemBackground" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#EEEEEE" />
+
+            <TextView
+                android:id="@+id/tvCustomerManagement"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/profile_customers"
                 android:textColor="@color/black"
                 android:padding="15dp"
                 android:background="?android:attr/selectableItemBackground" />
@@ -101,6 +115,14 @@
                 android:background="?android:attr/selectableItemBackground" />
 
         </LinearLayout>
+        <Button
+            android:id="@+id/btnOpenStoreLocations"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ver tiendas Huelluditos"
+            android:backgroundTint="@color/primary_color"
+            android:textColor="@color/white"
+            android:layout_marginTop="16dp" />
 
     </LinearLayout>
 
